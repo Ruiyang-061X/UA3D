@@ -47,6 +47,7 @@ conda activate UL3D; cd downstream/OpenPCDet/tools; bash scripts/dist_test.sh 4 
 - [`downstream/OpenPCDet/pcdet/models/detectors/point_rcnn.py`](downstream/OpenPCDet/pcdet/models/detectors/point_rcnn.py): Combine primary detector loss and auxiliary detector loss into final supervision loss.
 - [`downstream/OpenPCDet/tools/cfgs/nuscenes_boston_models/pointrcnn_dynamic_obj.yaml`](downstream/OpenPCDet/tools/cfgs/nuscenes_boston_models/pointrcnn_dynamic_obj.yaml): nuScenes hyperparameters for auxilary detector, including FPLayers, PointHead, and ROIHead.
 - [`downstream/OpenPCDet/tools/cfgs/lyft_models/pointrcnn_dynamic_obj.yaml`](downstream/OpenPCDet/tools/cfgs/lyft_models/pointrcnn_dynamic_obj.yaml): Lyft hyperparameters for auxilary detector, including FPLayers, PointHead, and ROIHead.
+- [`downstream/OpenPCDet/pcdet/models/detectors/detector3d_template.py`](downstream/OpenPCDet/pcdet/models/detectors/detector3d_template.py): Update 3D detection template topology to support auxiliary detector structure.
 
 ## License
 This project is under the MIT License.
