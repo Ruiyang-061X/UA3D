@@ -20,7 +20,7 @@ class Detector3DTemplate(nn.Module):
 
         self.module_topology = [
             'vfe', 'backbone_3d', 'map_to_bev_module', 'pfe',
-            'backbone_2d', 'dense_head',  'point_head', 'roi_head'
+            'backbone_2d', 'dense_head',  'point_head', 'point_head2', 'roi_head', 'roi_head2'
         ]
 
     @property
@@ -76,6 +76,7 @@ class Detector3DTemplate(nn.Module):
         )
         model_info_dict['module_list'].append(backbone_3d_module)
         model_info_dict['num_point_features'] = backbone_3d_module.num_point_features
+        model_info_dict['num_point_features2'] = backbone_3d_module.num_point_features2
         model_info_dict['backbone_channels'] = backbone_3d_module.backbone_channels \
             if hasattr(backbone_3d_module, 'backbone_channels') else None
         return backbone_3d_module, model_info_dict
@@ -154,6 +155,25 @@ class Detector3DTemplate(nn.Module):
         model_info_dict['module_list'].append(point_head_module)
         return point_head_module, model_info_dict
 
+    def build_point_head2(self, model_info_dict):
+        if self.model_cfg.get('POINT_HEAD', None) is None:
+            return None, model_info_dict
+
+        if self.model_cfg.POINT_HEAD.get('USE_POINT_FEATURES_BEFORE_FUSION', False):
+            num_point_features = model_info_dict['num_point_features_before_fusion']
+        else:
+            num_point_features = model_info_dict['num_point_features2']
+
+        point_head_module = dense_heads.__all__[self.model_cfg.POINT_HEAD.NAME](
+            model_cfg=self.model_cfg.POINT_HEAD,
+            input_channels=num_point_features,
+            num_class=self.num_class if not self.model_cfg.POINT_HEAD.CLASS_AGNOSTIC else 1,
+            predict_boxes_when_training=self.model_cfg.get('ROI_HEAD', False)
+        )
+
+        model_info_dict['module_list'].append(point_head_module)
+        return point_head_module, model_info_dict
+
     def build_roi_head(self, model_info_dict):
         if self.model_cfg.get('ROI_HEAD', None) is None:
             return None, model_info_dict
@@ -164,6 +184,21 @@ class Detector3DTemplate(nn.Module):
             point_cloud_range=model_info_dict['point_cloud_range'],
             voxel_size=model_info_dict['voxel_size'],
             num_class=self.num_class if not self.model_cfg.ROI_HEAD.CLASS_AGNOSTIC else 1,
+        )
+
+        model_info_dict['module_list'].append(point_head_module)
+        return point_head_module, model_info_dict
+
+    def build_roi_head2(self, model_info_dict):
+        if self.model_cfg.get('ROI_HEAD2', None) is None:
+            return None, model_info_dict
+        point_head_module = roi_heads.__all__[self.model_cfg.ROI_HEAD2.NAME](
+            model_cfg=self.model_cfg.ROI_HEAD2,
+            input_channels=model_info_dict['num_point_features2'],
+            backbone_channels=model_info_dict['backbone_channels'],
+            point_cloud_range=model_info_dict['point_cloud_range'],
+            voxel_size=model_info_dict['voxel_size'],
+            num_class=self.num_class if not self.model_cfg.ROI_HEAD2.CLASS_AGNOSTIC else 1,
         )
 
         model_info_dict['module_list'].append(point_head_module)
@@ -200,7 +235,7 @@ class Detector3DTemplate(nn.Module):
             else:
                 assert batch_dict['batch_box_preds'].shape.__len__() == 3
                 batch_mask = index
-
+            
             box_preds = batch_dict['batch_box_preds'][batch_mask]
             src_box_preds = box_preds
 
