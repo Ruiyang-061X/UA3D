@@ -1,6 +1,6 @@
 # Harnessing Uncertainty-aware Bounding Boxes for Unsupervised 3D Object Detection
 
-by [Ruiyang Zhang](https://ruiyang-061x.github.io/), Hu Zhang, Hang Yu, [Zhedong Zheng](https://www.zdzheng.xyz/)
+by [Ruiyang Zhang](https://ruiyang-061x.github.io/), Hu Zhang, [Zhedong Zheng](https://www.zdzheng.xyz/)
 
 ## Motivation
 ![](.asset/Motivation.png)
@@ -69,7 +69,7 @@ Our repo is based on [MODEST(CVPR'22)](https://github.com/YurongYou/MODEST), [Op
 @inproceedings{zhang2024harnessing,
   title={Harnessing Uncertainty-aware Bounding Boxes for Unsupervised 3D Object Detection},
   author={Zhang, Ruiyang and Zhang, Hu and Yu, Hang and Zheng, Zhedong},
-  booktitle={Arxiv},
-  year={2024}
+  booktitle={ICCV},
+  year={2025}
 }
 ```
