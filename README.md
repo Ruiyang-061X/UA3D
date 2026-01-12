@@ -68,7 +68,7 @@ Our repo is based on [MODEST(CVPR'22)](https://github.com/YurongYou/MODEST), [Op
 ```bib
 @inproceedings{zhang2024harnessing,
   title={Harnessing Uncertainty-aware Bounding Boxes for Unsupervised 3D Object Detection},
-  author={Zhang, Ruiyang and Zhang, Hu and Yu, Hang and Zheng, Zhedong},
+  author={Zhang, Ruiyang and Zhang, Hu and Zheng, Zhedong},
   booktitle={ICCV},
   year={2025}
 }
